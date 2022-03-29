@@ -1,0 +1,14 @@
+[app]
+env = "dev"
+http_addr = "0.0.0.0:8000"
+
+[database]
+hostname = "127.0.0.1"
+port = 3306
+name = "order_manager"
+username = "root"
+password = "order_manager"
+
+[prometheus]
+name = "com_api"
+path = "/metrics"
