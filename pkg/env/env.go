@@ -1,8 +1,11 @@
 package env
 
 import (
+	"context"
+	"time"
+
+	"github.com/kaduartur/go-planet/pkg/log"
 	"github.com/spf13/viper"
-	"log"
 )
 
 const fileName = "config.toml"
@@ -20,15 +23,15 @@ type Database struct {
 	Password string `mapstructure:"password"`
 }
 
-type Prometheus struct {
-	Name string `mapstructure:"name"`
-	Path string `mapstructure:"path"`
+type Swapi struct {
+	HostName string        `mapstructure:"hostname"`
+	Timeout  time.Duration `mapstructure:"timeout"`
 }
 
 type Config struct {
-	App        App        `mapstructure:"app"`
-	DB         Database   `mapstructure:"database"`
-	Prometheus Prometheus `mapstructure:"prometheus"`
+	App   App      `mapstructure:"app"`
+	DB    Database `mapstructure:"database"`
+	Swapi Swapi    `mapstructure:"swapi"`
 }
 
 func New() *Config {
@@ -38,11 +41,11 @@ func New() *Config {
 	v.AutomaticEnv()
 
 	if err := v.ReadInConfig(); err != nil {
-		log.Println("No env file, using environment variables.", err)
+		log.Error(context.TODO(), "no env file, using environment variables.", err)
 	}
 
 	if err := v.Unmarshal(&cfg); err != nil {
-		log.Fatal("Error trying to unmarshal configuration", err)
+		log.Fatal(context.TODO(), "error trying to unmarshal configuration", err)
 	}
 
 	return &cfg
